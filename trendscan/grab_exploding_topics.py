@@ -2,7 +2,14 @@ import requests
 from bs4 import BeautifulSoup
 import csv
 from langdetect import detect
+from pathlib import Path
 
+# Define the output directory and create it if it doesn't exist
+output_dir = Path(__file__).resolve().parent.parent / "output"
+output_dir.mkdir(parents=True, exist_ok=True)
+
+# Path to the output CSV file
+output_file = output_dir / "exploding_topics.csv"
 
 def is_english(description):
     try:
@@ -37,15 +44,15 @@ if response.status_code == 200:
                 'description': description
             })
 
-    # Write the topics data to a CSV file
-    with open("exploding_topics.csv", "w", newline="", encoding="utf-8") as csvfile:
+    # Write the topics data to the CSV file in the output directory
+    with output_file.open("w", newline="", encoding="utf-8") as csvfile:
         fieldnames = ['title', 'volume', 'growth', 'description']
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
 
         writer.writeheader()  # Write the header row
         writer.writerows(topics)  # Write all valid topic rows
 
-    print("Topics saved to exploding_topics.csv")
+    print(f"Topics saved to {output_file}")
 
 else:
     print("Failed to retrieve the page. Status code:", response.status_code)
