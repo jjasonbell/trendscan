@@ -4,9 +4,8 @@ import requests
 from bs4 import BeautifulSoup
 from trendscan.scraping_functions import google_scrape
 
-# Environmental variable, set in .zshrc or .bashrc 
-# In .zshrc:
-# SERP_API_KEY="SerpApi key"
+# Environmental variable, set in .env or .zshrc/.bashrc
+# export SERP_API_KEY="SerpApi key here"
 api_key = os.getenv("SERP_API_KEY")
 
 if len(sys.argv) > 1:
