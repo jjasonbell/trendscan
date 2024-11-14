@@ -1,4 +1,4 @@
-from serpapi import GoogleSearch
+import serpapi 
 import pickle
 
 def get_google_results(search_term, api_key, pages=1):
@@ -7,17 +7,20 @@ def get_google_results(search_term, api_key, pages=1):
     pages = int(pages)
     for i in range(pages):
         params = {
-            "engine": "google",
             "q": search_term,
+            "engine": "google",
             "api_key": api_key,
-            "start": i * 10  # Pagination: 10 results per page
+            "start": i * 10,  # Pagination: 10 results per page
+            "location": "Austin, Texas",  # Adjust this location if needed
+            "hl": "en",
+            "gl": "us"
         }
-        search = GoogleSearch(params)
-        search_results = search.get_dict()
-        organic_results = search_results.get("organic_results", [])
-        ads = search_results.get("ads", [])
         
-        results.extend(organic_results + ads)
+        # Call the serpapi search function directly
+        search = serpapi.search(**params)
+        search_results = search.get("organic_results", []) + search.get("ads", [])
+        
+        results.extend(search_results)
         print(f'Page {i + 1} of Google results gathered (organic and sponsored).')
         
     return results

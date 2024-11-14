@@ -3,10 +3,10 @@ import pickle
 import requests 
 from bs4 import BeautifulSoup
 from trendscan.scraping_functions import google_scrape
+from trendscan import SERP_API_KEY
 
-# Environmental variable, set in .env or .zshrc/.bashrc
-# export SERP_API_KEY="SerpApi key here"
-api_key = os.getenv("SERP_API_KEY")
+
+api_key = SERP_API_KEY
 
 if len(sys.argv) > 1:
     search_text = sys.argv[1]
@@ -15,7 +15,7 @@ else:
     search_text = input("Search query? ")
     pages = input("How many pages? ")
 
-with open('search_text.p', 'wb') as f:
+with open('output/search_text.p', 'wb') as f:
     pickle.dump(search_text, f)
 
 results = google_scrape(search_text, api_key, pages)
@@ -43,7 +43,7 @@ for result in results:
         "page_text": page_text  # Include the fetched text
     })
 
-with open('search_results.p', 'wb') as f:
+with open('output/search_results.p', 'wb') as f:
     pickle.dump(full_results, f)
 
 print("\nSearch results with page text saved to search_results.p")
